@@ -58,10 +58,9 @@ function App() {
             timestamp: new Date(alert.time).getTime(),
             status: 'current'
           };
-          
-          return [newAlert, ...prev]
+            return [newAlert, ...prev]
             .sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0))
-            .slice(0, 60);
+            .slice(0, 120);
         });
       }
       
@@ -153,9 +152,8 @@ function App() {
         
         // Sắp xếp theo thời gian mới nhất trước
         const sortedAlerts = alertArray.sort((a, b) => b.timestamp - a.timestamp);
-        
-        // Lấy tất cả cảnh báo nhưng đánh dấu trạng thái
-        setAlerts(sortedAlerts.slice(0, 60)); // Hiển thị 60 điểm mới nhất
+          // Lấy tất cả cảnh báo nhưng đánh dấu trạng thái
+        setAlerts(sortedAlerts.slice(0, 120)); // Hiển thị 120 điểm mới nhất
       } else {
         setAlerts([]);
       }
@@ -179,10 +177,9 @@ function App() {
         }));
           // Sắp xếp theo thời gian
         historyArray.sort((a, b) => a.timestamp - b.timestamp);
-        
-        console.log(`Đã tải ${historyArray.length} điểm dữ liệu, hiển thị 60 điểm mới nhất`);
+          console.log(`Đã tải ${historyArray.length} điểm dữ liệu, hiển thị 120 điểm mới nhất`);
         console.log(`Địa điểm đang tải: ${locationId}`);
-        setNoiseHistory(historyArray.slice(-60)); // Hiển thị 60 điểm mới nhất
+        setNoiseHistory(historyArray.slice(-120)); // Hiển thị 120 điểm mới nhất
       } else {
         console.log(`Không tìm thấy dữ liệu lịch sử cho địa điểm ID: ${locationId}`);
         setNoiseHistory([]);
@@ -227,15 +224,15 @@ function App() {
           
           // Nếu đang ở địa điểm này, cập nhật trực tiếp vào noiseHistory để hiển thị ngay
           if (selectedLocation === locationId) {
-            // Thêm điểm dữ liệu mới vào cuối mảng và giữ 60 điểm gần nhất
+            // Thêm điểm dữ liệu mới vào cuối mảng và giữ 120 điểm gần nhất
             setNoiseHistory(prev => {
               const newItem = {
                 time: new Date(timestamp).toLocaleTimeString(),
                 value: noiseValue,
                 timestamp: new Date(timestamp).getTime()
               };
-              // Tạo mảng mới chỉ giữ 59 điểm gần nhất và thêm điểm mới vào cuối
-              const updatedHistory = [...prev.slice(-59), newItem];
+              // Tạo mảng mới chỉ giữ 119 điểm gần nhất và thêm điểm mới vào cuối
+              const updatedHistory = [...prev.slice(-119), newItem];
               return updatedHistory;
             });
           }
@@ -282,18 +279,17 @@ function App() {
           time: timestamp,
           noise: noiseValue,
         });
-        
-        // Nếu đang ở địa điểm này, cập nhật trực tiếp vào noiseHistory để hiển thị ngay
+          // Nếu đang ở địa điểm này, cập nhật trực tiếp vào noiseHistory để hiển thị ngay
         if (selectedLocation === locationId) {
-          // Thêm điểm dữ liệu mới vào cuối mảng và giữ 60 điểm gần nhất
+          // Thêm điểm dữ liệu mới vào cuối mảng và giữ 120 điểm gần nhất
           setNoiseHistory(prev => {
             const newItem = {
               time: new Date(timestamp).toLocaleTimeString(),
               value: noiseValue,
               timestamp: new Date(timestamp).getTime()
             };
-            // Tạo mảng mới chỉ giữ 59 điểm gần nhất và thêm điểm mới vào cuối
-            const updatedHistory = [...prev.slice(-59), newItem];
+            // Tạo mảng mới chỉ giữ 119 điểm gần nhất và thêm điểm mới vào cuối
+            const updatedHistory = [...prev.slice(-119), newItem];
             return updatedHistory;
           });
         }

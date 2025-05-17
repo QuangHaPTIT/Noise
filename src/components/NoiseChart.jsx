@@ -18,11 +18,18 @@ const NoiseChart = ({ noiseHistory, locationName, threshold = 85 }) => {
           </div>
         )}
         <ResponsiveContainer width="100%" height="100%">
-          <LineChart data={noiseHistory} margin={{ top: 10, right: 30, left: 10, bottom: 30 }}>
-            <CartesianGrid
+          <LineChart 
+            data={noiseHistory} 
+            margin={{ top: 10, right: 30, left: 10, bottom: 30 }}
+            isAnimationActive={true}
+            animationDuration={500}
+            animationEasing="ease-in-out"
+          >            <CartesianGrid
               strokeDasharray="3 3"
               stroke="#e5e7eb"
-              strokeOpacity={0.5}
+              strokeOpacity={0.3}
+              horizontal={true}
+              vertical={true}
               className="dark:[&>line]:stroke-gray-600"
             />
             <XAxis
@@ -45,13 +52,18 @@ const NoiseChart = ({ noiseHistory, locationName, threshold = 85 }) => {
                 style: { textAnchor: 'middle', fill: '#6b7280' },
                 className: "dark:fill-white"
               }}
-            />
-            <Tooltip
+            />            <Tooltip
               contentStyle={{
                 backgroundColor: '#fff',
                 border: '1px solid #e5e7eb',
+                borderRadius: '6px',
+                boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
+                padding: '8px 12px',
                 color: '#000',
               }}
+              animationDuration={300}
+              animationEasing="ease-out"
+              cursor={{ stroke: '#3B82F6', strokeWidth: 1, strokeDasharray: '5 5' }}
               wrapperClassName="dark:[&>div]:bg-gray-900 dark:[&>div]:border-gray-700 dark:[&>div]:text-white"
               formatter={(value) => [`${value} dB`, 'Độ ồn']}
               labelFormatter={(time) => `Thời gian: ${time}`}
@@ -63,29 +75,30 @@ const NoiseChart = ({ noiseHistory, locationName, threshold = 85 }) => {
               className="dark:[&>div>svg]:text-white dark:[&>div]:text-white"
             />            <ReferenceLine 
               y={threshold} 
-              label={{ 
-                value: `Ngưỡng an toàn (${threshold} dB)`, 
-                position: 'right',
-                fill: '#EF4444',
-                fontSize: 12
-              }} 
               stroke="#EF4444" 
-              strokeDasharray="3 3" 
-            />
+              strokeWidth={1.5}
+              strokeDasharray="5 5" 
+              isFront={true}
+            />{/* Đường chính hiển thị dữ liệu - cải tiến cho độ mượt tốt và chính xác */}
             <Line
-              type="monotone"
+              type="natural"
               dataKey="value"
               stroke="#3B82F6"
-              strokeWidth={2}
+              strokeWidth={2.5}
               name="Mức độ tiếng ồn"
-              activeDot={{ r: 6 }}
-              dot={{ r: 3 }}
+              activeDot={{ r: 6, fill: '#3B82F6', stroke: '#fff', strokeWidth: 2 }}
+              dot={{ r: 0 }}
+              connectNulls={true}
+              animationDuration={800}
+              isAnimationActive={true}
+              strokeLinecap="round"
+              strokeLinejoin="round"
               className="dark:[&>path]:stroke-blue-400"
             />
           </LineChart>
         </ResponsiveContainer>
       </div>      <div className="mt-2 text-sm text-gray-500 dark:text-gray-400">
-        <p>Hiển thị 60 điểm dữ liệu mới nhất từ cơ sở dữ liệu</p>
+        <p>Hiển thị 120 điểm dữ liệu mới nhất từ cơ sở dữ liệu</p>
         <p className="mt-1">Đường đứt nét màu đỏ thể hiện ngưỡng an toàn</p>
         {locationName && (
           <p className="mt-1 font-medium text-blue-500 dark:text-blue-400">
