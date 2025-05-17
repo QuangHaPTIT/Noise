@@ -255,17 +255,36 @@ function App() {
     };
   }, [loadNoiseHistoryFromFirebase, selectedLocation, createRealtimeAlert]);
 
-  // Dữ liệu mô phỏng cho PTIT Hà Đông (thay thế cho OpenSenseMap)
+  // Dữ liệu mô phỏng cho PTIT Hà Đông (thay thế cho OpenSenseMap)  // Tạo biến để lưu trữ giá trị noise hiện tại ở ngoài useEffect để giữ lại giữa các lần render
+  const [lastNoiseHadong] = useState({ value: 45 });
+
   useEffect(() => {
-    const generateRandomNoise = () => {
-      // Tạo giá trị ngẫu nhiên từ 40 đến 90 dB
-      const base = 40; // Giá trị cơ sở
-      const variation = Math.random() * 50; // Biến thiên ngẫu nhiên
-      return parseFloat((base + variation).toFixed(1));
-    };    const fetchFakeNoise = async () => {
+    const generateRealisticNoise = () => {
+      // Lấy giá trị noise hiện tại hoặc giá trị khởi tạo
+      const currentNoise = lastNoiseHadong.value;
+      
+      // Tạo sự thay đổi nhỏ từ -1.5 đến +1.5 dB để mô phỏng dao động tự nhiên
+      const smallChange = (Math.random() * 3 - 1.5);
+      
+      // Có 10% cơ hội tạo ra dao động lớn hơn
+      const bigChange = Math.random() < 0.1 ? (Math.random() * 10 - 5) : 0;
+      
+      // Kết hợp các thay đổi
+      let newNoise = currentNoise + smallChange + bigChange;
+      
+      // Giữ giá trị trong khoảng hợp lý 40-90dB
+      newNoise = Math.max(40, Math.min(90, newNoise));
+      
+      // Lưu giá trị mới để lần sau sử dụng
+      lastNoiseHadong.value = newNoise;
+      
+      return parseFloat(newNoise.toFixed(1));
+    };
+
+    const fetchFakeNoise = async () => {
       try {
-        // Tạo giá trị giả thay vì gọi API
-        const noiseValue = generateRandomNoise();
+        // Tạo giá trị giả với thuật toán thực tế hơn
+        const noiseValue = generateRealisticNoise();
         const locationId = 2; // PTIT Hà Đông
 
         setLocations((prev) =>
@@ -300,13 +319,12 @@ function App() {
         console.error('Lỗi khi tạo dữ liệu giả:', error);
       }
     };
-    
-    // Giảm khoảng thời gian từ 30s xuống 10s để nhìn thấy sự thay đổi nhanh hơn
-    const interval = setInterval(fetchFakeNoise, 10000);
-    fetchFakeNoise();
+      // Cập nhật dữ liệu mỗi 1.5 giây để có cảm giác thời gian thực hơn
+    const interval = setInterval(fetchFakeNoise, 1500);
+    fetchFakeNoise(); // Gọi ngay lần đầu
 
     return () => clearInterval(interval);
-  }, [selectedLocation, createRealtimeAlert]);  // Chỉ theo dõi trạng thái hiện tại của địa điểm đã chọn
+  }, [selectedLocation, createRealtimeAlert, lastNoiseHadong]);  // Chỉ theo dõi trạng thái hiện tại của địa điểm đã chọn
   useEffect(() => {
     const selectedLoc = locations.find((loc) => loc.id === selectedLocation);
     if (selectedLoc) {
