@@ -1,0 +1,53 @@
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+/* CSS cho Leaflet */
+.leaflet-container {
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+}
+
+/* Animation cho fade-in và fade-out */
+@keyframes fadein {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fadein {
+  animation: fadein 0.3s ease-in-out;
+}
+
+/* Cải thiện màu chữ trên bản đồ trong chế độ tối */
+.dark .leaflet-container {
+  color: #f3f4f6;
+}
+
+.dark .leaflet-control-attribution {
+  background-color: rgba(31, 41, 55, 0.8) !important;
+  color: #d1d5db !important;
+}
+
+.dark .leaflet-control-attribution a {
+  color: #93c5fd !important;
+}
+
+.leaflet-control {
+  z-index: 1;
+}
+
+.leaflet-popup-content {
+  margin: 10px;
+  text-align: center;
+}
