@@ -56,8 +56,7 @@ const Header = ({ setThreshold, alerts }) => {
               className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
             >
               <Settings className="w-6 h-6 text-gray-600 dark:text-gray-300" />
-            </button>
-            {showSettings && (
+            </button>            {showSettings && (
               <SettingsPanelHeader
                 setThreshold={setThreshold}
                 onClose={() => setShowSettings(false)}

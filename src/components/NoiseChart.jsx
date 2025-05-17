@@ -1,7 +1,7 @@
 import React from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, ReferenceLine } from 'recharts';
 
-const NoiseChart = ({ noiseHistory, locationName }) => {
+const NoiseChart = ({ noiseHistory, locationName, threshold = 85 }) => {
   const isLoading = noiseHistory.length === 0;
 
   return (
@@ -61,11 +61,10 @@ const NoiseChart = ({ noiseHistory, locationName }) => {
                 color: '#6b7280',
               }}
               className="dark:[&>div>svg]:text-white dark:[&>div]:text-white"
-            />
-            <ReferenceLine 
-              y={85} 
+            />            <ReferenceLine 
+              y={threshold} 
               label={{ 
-                value: 'Ngưỡng an toàn', 
+                value: `Ngưỡng an toàn (${threshold} dB)`, 
                 position: 'right',
                 fill: '#EF4444',
                 fontSize: 12

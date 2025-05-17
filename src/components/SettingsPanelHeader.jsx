@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from 'react';
 
 const SettingsPanelHeader = ({ setThreshold, onClose }) => {
-  const [localThreshold, setLocalThreshold] = useState(85);
+  const [localThreshold, setLocalThreshold] = useState(() => {
+    const savedThreshold = localStorage.getItem('noiseThreshold');
+    return savedThreshold ? parseInt(savedThreshold, 10) : 85;
+  });
   const [theme, setTheme] = useState(() => {
     return localStorage.getItem('theme') || 'light';
   });
@@ -27,6 +30,8 @@ const SettingsPanelHeader = ({ setThreshold, onClose }) => {
     // Chuyển đổi thành số và đảm bảo giá trị hợp lý (0-150dB là phạm vi hợp lý cho tiếng ồn)
     const newThreshold = Math.min(150, Number(validInput));
     setLocalThreshold(newThreshold);
+    // Lưu vào localStorage và cập nhật giá trị toàn cục
+    localStorage.setItem('noiseThreshold', newThreshold);
     setThreshold(newThreshold);
   };
 
